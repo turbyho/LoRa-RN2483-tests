@@ -1,0 +1,78 @@
+#!/usr/bin/env python
+# Tomas Urbanek
+# LoRa module RN2483 - first testing - RX routine
+# 2016-01-09 v0.1
+# http://www.microchip.com/DevelopmentTools/ProductDetails.aspx?PartNO=dm164138
+#
+
+import time
+import serial
+
+# your TTY
+tty="/dev/cu.SLAB_USBtoUART4"
+ttyb=57600
+# your devaddr here
+devaddr="ABCDEF01"
+device="nodes/"+devaddr
+
+config = []
+config.append("sys factoryRESET")
+config.append("sys reset")
+config.append("radio set mod lora")
+config.append("radio set freq 868100000")
+config.append("radio set pwr 14")
+config.append("radio set sf sf12")
+config.append("radio set afcbw 125")
+config.append("radio set rxbw 250")
+config.append("radio set fdev 5000")
+config.append("radio set prlen 8")
+config.append("radio set crc on")
+config.append("radio set cr 4/8")
+config.append("radio set wdt 0")
+config.append("radio set sync 12")
+config.append("radio set bw 250")
+config.append("mac pause")
+
+
+#config.append("mac reset 868")
+#config.append("mac set pwridx 5")
+#config.append("mac set dr 5")
+#config.append("mac set adr off")
+#config.append("mac set nwkskey 2B7E151628AED2A6ABF7158809CF4F3C")
+#config.append("mac set appskey 2B7E151628AED2A6ABF7158809CF4F3C")
+#config.append("mac set devaddr "+devaddr)
+#config.append("mac save")
+#config.append("mac join abp")
+
+def send(data, p):
+	p.write(data+"\x0d\x0a")
+	data.rstrip()
+	print(data)
+	time.sleep(0.1)
+	rdata=p.readline()
+	rdata=rdata[:-1]
+	print rdata
+	
+def sendd(data, p):
+	p.write(data+"\x0d\x0a")
+	time.sleep(0.1)
+	rdata=p.readline()
+
+
+p = serial.Serial(tty , ttyb)
+
+for c in config:
+	send(c, p)
+		
+
+time.sleep(1)
+
+print("READY FOR RX")
+
+while True :
+    sendd("radio rx 0", p)
+    s = p.readline()
+    print(s)
+
+
+
