@@ -2,7 +2,7 @@
 # Tomas Urbanek
 # LoRa module RN2483 - first testing - TX routine
 # 2016-01-09 v0.1
-# http://www.microchip.com/DevelopmentTools/ProductDetails.aspx?PartNO=dm164138
+# http://ww1.microchip.com/downloads/en/DeviceDoc/40001784C.pdf
 #
 
 import time
